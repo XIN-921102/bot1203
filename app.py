@@ -56,8 +56,8 @@ def handle_message(event):
 
     elif message == '心情不好':
             sticker_message = StickerSendMessage(
-            package_id='11538',
-            sticker_id='52002767'  # 傷心的貼圖
+            package_id='11537',
+            sticker_id='52002750'  # 傷心的貼圖
         )
             line_bot_api.reply_message(event.reply_token, sticker_message)
 
