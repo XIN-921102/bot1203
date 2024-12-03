@@ -49,17 +49,35 @@ def handle_message(event):
 
     elif message == '心情好':
         sticker_message = StickerSendMessage(
-            package_id='789',
-            sticker_id='10874'  # 開心的貼圖
+            package_id='11537',
+            sticker_id='52002735'  # 開心的貼圖
         )
         line_bot_api.reply_message(event.reply_token, sticker_message)
 
     elif message == '心情不好':
         sticker_message = StickerSendMessage(
-            package_id='446',
-            sticker_id='2022'  # 傷心的貼圖
+            package_id='11538',
+            sticker_id='51626518'  # 傷心的貼圖
         )
         line_bot_api.reply_message(event.reply_token, sticker_message)
+
+    elif message == '找美食':
+        location_message = LocationSendMessage(
+            title='著名餐廳',
+            address='台北市信義區松壽路12號',
+            latitude=25.035774,  # 餐廳的緯度
+            longitude=121.567414  # 餐廳的經度
+        )
+        line_bot_api.reply_message(event.reply_token, location_message)
+
+    elif message == '找景點':
+        location_message = LocationSendMessage(
+            title='熱門景點',
+            address='台北市大安區羅斯福路四段1號',
+            latitude=25.017341,  # 景點的緯度
+            longitude=121.539752  # 景點的經度
+        )
+        line_bot_api.reply_message(event.reply_token, location_message)
 
     else:
         reply_text = '很抱歉，我目前無法理解這個內容。'
