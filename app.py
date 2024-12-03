@@ -43,15 +43,27 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = text=event.message.text
-    if re.match('告訴我秘密',message):
-        # 貼圖查詢：https://developers.line.biz/en/docs/messaging-api/sticker-list/#specify-sticker-in-message-object
+    if message == '天氣':
+        reply_text = '請稍等，我幫您查詢天氣資訊！'
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+
+    elif message == '心情好':
         sticker_message = StickerSendMessage(
             package_id='789',
-            sticker_id='10857'
+            sticker_id='10874'  # 開心的貼圖
         )
         line_bot_api.reply_message(event.reply_token, sticker_message)
+
+    elif message == '心情不好':
+        sticker_message = StickerSendMessage(
+            package_id='446',
+            sticker_id='2022'  # 傷心的貼圖
+        )
+        line_bot_api.reply_message(event.reply_token, sticker_message)
+
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+        reply_text = '很抱歉，我目前無法理解這個內容。'
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
 #主程式
 import os
 if __name__ == "__main__":
