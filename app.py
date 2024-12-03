@@ -44,44 +44,85 @@ def callback():
 def handle_message(event):
     message = text=event.message.text
     if message == '天氣':
-        reply_text = '請稍等，我幫您查詢天氣資訊！'
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+            reply_text = '請稍等，我幫您查詢天氣資訊！'
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
 
     elif message == '心情好':
-        sticker_message = StickerSendMessage(
+            sticker_message = StickerSendMessage(
             package_id='11537',
             sticker_id='52002735'  # 開心的貼圖
         )
-        line_bot_api.reply_message(event.reply_token, sticker_message)
+            line_bot_api.reply_message(event.reply_token, sticker_message)
 
     elif message == '心情不好':
-        sticker_message = StickerSendMessage(
+            sticker_message = StickerSendMessage(
             package_id='11538',
             sticker_id='51626518'  # 傷心的貼圖
         )
-        line_bot_api.reply_message(event.reply_token, sticker_message)
+            line_bot_api.reply_message(event.reply_token, sticker_message)
 
     elif message == '找美食':
-        location_message = LocationSendMessage(
+            location_message = LocationSendMessage(
             title='著名餐廳',
             address='台北市信義區松壽路12號',
-            latitude=25.035774,  # 餐廳的緯度
-            longitude=121.567414  # 餐廳的經度
+            latitude=25.035774,
+            longitude=121.567414
         )
-        line_bot_api.reply_message(event.reply_token, location_message)
+            line_bot_api.reply_message(event.reply_token, location_message)
 
     elif message == '找景點':
-        location_message = LocationSendMessage(
+            location_message = LocationSendMessage(
             title='熱門景點',
             address='台北市大安區羅斯福路四段1號',
-            latitude=25.017341,  # 景點的緯度
-            longitude=121.539752  # 景點的經度
+            latitude=25.017341,
+            longitude=121.539752
         )
-        line_bot_api.reply_message(event.reply_token, location_message)
+            line_bot_api.reply_message(event.reply_token, location_message)
+
+    elif message == '熱門音樂':
+            audio_message = AudioSendMessage(
+            original_content_url='https://youtu.be/oxWz_j2JDuA?si=WDWEZInKoLN2pFsk',  # 替換為實際的音樂檔案網址
+            duration=240000  # 音樂長度（毫秒）
+        )
+            line_bot_api.reply_message(event.reply_token, audio_message)
+
+    elif message == '放鬆音樂':
+            audio_message = AudioSendMessage(
+            original_content_url='https://youtu.be/wlSvIL-H1GQ?si=qj3IrsAJ1TkZ8msr',  # 替換為實際的音樂檔案網址
+            duration=300000  # 音樂長度（毫秒）
+        )
+            line_bot_api.reply_message(event.reply_token, audio_message)
+
+    elif message == '今天是我的生日':
+            image_message = ImageSendMessage(
+            original_content_url='https://www.yesonlineeng.com/wp-content/uploads/2024/06/%E7%94%9F%E6%97%A5%E5%BF%AB%E6%A8%82%E8%8B%B1%E6%96%87.jpg',  # 替換為實際的圖片網址
+            preview_image_url='https://img.lovepik.com/png/20230929/happy-birthday-birthday-banner-birthday-invitation-birthday-font_26482_wh1200.png'  # 替換為實際的預覽圖片網址
+        )
+            text_message = TextSendMessage(text='生日快樂！')
+            line_bot_api.reply_message(event.reply_token, [image_message, text_message])
+
+    elif message in ['動作片', '動畫', '紀錄片']:
+        # 根據類型傳送影片
+        video_urls = {
+            '動作片': 'https://youtu.be/tYgxCJWD_5Y?si=WWENRbz2UZC4yLJe',
+            '動畫': 'https://youtu.be/Y3roUIXa2Fg?si=nD8o6RADdZM7JWVO',
+            '紀錄片': 'https://youtu.be/vmnuj5SoG-o?si=W20CtpegkCQ4LQdR'
+        }
+        video_url = video_urls.get(message)
+        if video_url:
+            reply_text = f'這是您要的{message}：\n{video_url}'
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+        else:
+            reply_text = '抱歉，沒有這類型的影片'
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+
+    elif message in ['科幻']:
+            reply_text = '抱歉，沒有這類型的影片'
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
 
     else:
-        reply_text = '很抱歉，我目前無法理解這個內容。'
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+            reply_text = '很抱歉，我目前無法理解這個內容。'
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
 #主程式
 import os
 if __name__ == "__main__":
