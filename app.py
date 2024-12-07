@@ -11,14 +11,15 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 import re
+import random
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi('grZNGQ4enesO10xsdNQNRHbKt4P4uYSU4LwSqDBPvR+G1gnnG4DgZE2WFHfLUpoCVE3tP3hLFrmmBTzqmTC5+Wy7P4o6fN825RpAyrHJ+ZKpm1xJ4IgCptwxSSvssovSlwnPe34cpkLYKCc3vd0BOwdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('RmscZ3tXPFTa3C+xKp9zU2zcapRysd2Lp/tRNkQT3a6FxxKY6XoTexhaMoarJVpf9X5PkvNRpFYLJJCpYJSlQfuPQ4VjgkuX46HOeXIv+fHJuqhaUGhSLXaWVsAqgVkY+zXzx40QYJL+d0GVK6BRQQdB04t89/1O/w1cDnyilFU=')
 # 必須放上自己的Channel Secret
-handler = WebhookHandler('b575b66d21e61d99d781691770236f63')
+handler = WebhookHandler('dde3f81dc0ffc12b0b826d473d1c7fa3')
 
-line_bot_api.push_message('U732b347d73dd0c11d034eb8233a15ef8', TextSendMessage(text='您好,目前時間是 2024/10/10 14:00 ，請問需要什麼服務呢?'))
+line_bot_api.push_message('Ue67e135a8e71bb7f0a94eb6947e0dc32', TextSendMessage(text='您好,目前時間是 2024/10/10 14:00 ，請問需要什麼服務呢?'))
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
@@ -43,6 +44,26 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = text=event.message.text
+    stickers = [
+        {"package_id": "446", "sticker_id": "1988"},
+        {"package_id": "789", "sticker_id": "10855"},
+        {"package_id": "1070", "sticker_id": "17839"},
+        {"package_id": "6136", "sticker_id": "10551376"},
+        {"package_id": "6325", "sticker_id": "10979904"},
+    ]
+
+    if event.message.text:
+        # 隨機選擇一個貼圖
+        sticker = random.choice(stickers)
+        sticker_message = StickerSendMessage(
+            package_id=sticker["package_id"],
+            sticker_id=sticker["sticker_id"]
+        )
+        line_bot_api.reply_message(event.reply_token, sticker_message)
+    else:
+        reply_text = '很抱歉，我目前無法理解這個內容。'
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+
     if message == '天氣':
             reply_text = '請稍等，我幫您查詢天氣資訊！'
             line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
