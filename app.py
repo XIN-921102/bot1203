@@ -46,10 +46,10 @@ def handle_message(event):
     message = text=event.message.text
     stickers = [
         {"package_id": "446", "sticker_id": "1988"},
-        {"package_id": "789", "sticker_id": "10855"},
-        {"package_id": "1070", "sticker_id": "17839"},
-        {"package_id": "6136", "sticker_id": "10551376"},
-        {"package_id": "6325", "sticker_id": "10979904"},
+        {"package_id": "446", "sticker_id": "1989"},
+        {"package_id": "446", "sticker_id": "1990"},
+        {"package_id": "446", "sticker_id": "1991"},
+        {"package_id": "446", "sticker_id": "1992"},
     ]
 
     if event.message.text:
