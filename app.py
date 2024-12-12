@@ -41,8 +41,8 @@ def callback():
 #訊息傳遞區塊
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = event.message.text
-    if re.match('告訴我秘密', message):
+    message = event.message.text.strip()
+    if message == '告訴我秘密':
         buttons_template_message = TemplateSendMessage(
             alt_text='這是樣板傳送訊息',
             template=ButtonsTemplate(
@@ -68,13 +68,13 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template_message)
 
-    if re.match('推薦景點', message):
+    elif message == '推薦景點':
         carousel_template_message = TemplateSendMessage(
             alt_text='旅遊景點推薦',
             template=CarouselTemplate(
                 columns=[
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/3UK5bhI.jpeg', # 台北101示意圖
+                        thumbnail_image_url='https://i.imgur.com/3UK5bhI.jpeg',
                         title='台北101',
                         text='世界著名地標與購物中心',
                         actions=[
@@ -85,7 +85,7 @@ def handle_message(event):
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg', # 故宮博物院示意圖
+                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg',
                         title='故宮博物院',
                         text='收藏中華文化藝術珍品',
                         actions=[
@@ -96,7 +96,7 @@ def handle_message(event):
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/qadTNYk.jpeg', # 九份老街示意圖
+                        thumbnail_image_url='https://i.imgur.com/qadTNYk.jpeg',
                         title='九份老街',
                         text='懷舊山城、茶館與特產',
                         actions=[
