@@ -38,87 +38,83 @@ def callback():
 
     return 'OK'
 
-# 訊息傳遞區塊
+#訊息傳遞區塊
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-
-    # 當使用者輸入「推薦餐廳」時回傳 Imagemap
-    if re.match('推薦餐廳', message):
-        imagemap_message = ImagemapSendMessage(
-            base_url='https://i.imgur.com/55M7yiZ.jpeg', # 請替換為您的背景圖 URL
-            alt_text='餐廳推薦',
-            base_size=BaseSize(height=2000, width=2000),
-            actions=[
-                # 日式料理
-                URIImagemapAction(
-                    link_uri='https://maps.app.goo.gl/s1ypuXqLgXCaBSQS9',
-                    area=ImagemapArea(
-                        x=0, y=0, width=1000, height=1000
+    if re.match('告訴我秘密', message):
+        buttons_template_message = TemplateSendMessage(
+            alt_text='這是樣板傳送訊息',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://i.imgur.com/kNBl363.jpg',
+                title='中華民國',
+                text='選單功能－TemplateSendMessage',
+                actions=[
+                    PostbackAction(
+                        label='這是PostbackAction',
+                        display_text='顯示文字',
+                        data='實際資料'
+                    ),
+                    MessageAction(
+                        label='這是MessageAction',
+                        text='實際資料'
+                    ),
+                    URIAction(
+                        label='這是URIAction',
+                        uri='https://en.wikipedia.org/wiki/Taiwan'
                     )
-                ),
-                # 西式料理
-                URIImagemapAction(
-                    link_uri='https://maps.app.goo.gl/BFWxPoURC6vk3pwZ9',
-                    area=ImagemapArea(
-                        x=1000, y=0, width=1000, height=1000
-                    )
-                ),
-                # 中式料理
-                URIImagemapAction(
-                    link_uri='https://maps.app.goo.gl/zf97xL1jerr9r9WKA',
-                    area=ImagemapArea(
-                        x=0, y=1000, width=1000, height=1000
-                    )
-                ),
-                # 法式料理
-                URIImagemapAction(
-                    link_uri='https://maps.app.goo.gl/8rJmSahbMDE4peZ38',
-                    area=ImagemapArea(
-                        x=1000, y=1000, width=1000, height=1000
-                    )
-                ),
-            ]
+                ]
+            )
         )
-        line_bot_api.reply_message(event.reply_token, imagemap_message)
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
 
-    elif re.match('告訴我秘密', message):
-        imagemap_message = ImagemapSendMessage(
-            base_url='https://i.imgur.com/xMUKNtn.jpg',
-            alt_text='組圖訊息',
-            base_size=BaseSize(height=2000, width=2000),
-            actions=[
-                URIImagemapAction(
-                    link_uri='https://en.wikipedia.org/wiki/Cebu',
-                    area=ImagemapArea(
-                        x=0, y=0, width=1000, height=1000
+    elif re.match('推薦景點', message):
+        carousel_template_message = TemplateSendMessage(
+            alt_text='旅遊景點推薦',
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/3UK5bhI.jpeg', # 台北101示意圖
+                        title='台北101',
+                        text='世界著名地標與購物中心',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://zh.wikipedia.org/wiki/台北101'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg', # 故宮博物院示意圖
+                        title='故宮博物院',
+                        text='收藏中華文化藝術珍品',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://www.npm.gov.tw/'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qadTNYk.jpeg', # 九份老街示意圖
+                        title='九份老街',
+                        text='懷舊山城、茶館與特產',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://zh.wikipedia.org/wiki/九份'
+                            )
+                        ]
                     )
-                ),
-                URIImagemapAction(
-                    link_uri='https://en.wikipedia.org/wiki/Taipei',
-                    area=ImagemapArea(
-                        x=1000, y=0, width=1000, height=1000
-                    )
-                ),
-                URIImagemapAction(
-                    link_uri='https://en.wikipedia.org/wiki/Osaka',
-                    area=ImagemapArea(
-                        x=0, y=1000, width=1000, height=1000
-                    )
-                ),
-                URIImagemapAction(
-                    link_uri='https://en.wikipedia.org/wiki/Shanghai',
-                    area=ImagemapArea(
-                        x=1000, y=1000, width=1000, height=1000
-                    )
-                )
-            ]
+                ]
+            )
         )
-        line_bot_api.reply_message(event.reply_token, imagemap_message)
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
+
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
-# 主程式
+#主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
