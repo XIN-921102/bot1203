@@ -68,7 +68,7 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template_message)
 
-    elif re.match('推薦景點', message):
+    if re.match('推薦景點', message):
         carousel_template_message = TemplateSendMessage(
             alt_text='旅遊景點推薦',
             template=CarouselTemplate(
