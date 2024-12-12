@@ -85,7 +85,7 @@ def handle_message(event):
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg[/img]', # 故宮博物院示意圖
+                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg', # 故宮博物院示意圖
                         title='故宮博物院',
                         text='收藏中華文化藝術珍品',
                         actions=[
