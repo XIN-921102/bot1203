@@ -46,7 +46,7 @@ def handle_message(event):
         buttons_template_message = TemplateSendMessage(
             alt_text='這是樣板傳送訊息',
             template=ButtonsTemplate(
-                thumbnail_image_url='https://i.imgur.com/kNBl363.jpg',
+                thumbnail_image_url='https://i.imgur.com/3UK5bhI.jpeg',
                 title='中華民國',
                 text='選單功能－TemplateSendMessage',
                 actions=[
