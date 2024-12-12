@@ -52,28 +52,28 @@ def handle_message(event):
             actions=[
                 # 日式料理
                 URIImagemapAction(
-                    link_uri='https://www.google.com/maps/search/?api=1&query=Japanese+restaurant',
+                    link_uri='https://maps.app.goo.gl/s1ypuXqLgXCaBSQS9',
                     area=ImagemapArea(
                         x=0, y=0, width=1000, height=1000
                     )
                 ),
                 # 西式料理
                 URIImagemapAction(
-                    link_uri='https://www.google.com/maps/search/?api=1&query=Western+restaurant',
+                    link_uri='https://maps.app.goo.gl/BFWxPoURC6vk3pwZ9',
                     area=ImagemapArea(
                         x=1000, y=0, width=1000, height=1000
                     )
                 ),
                 # 中式料理
                 URIImagemapAction(
-                    link_uri='https://www.google.com/maps/search/?api=1&query=Chinese+restaurant',
+                    link_uri='https://maps.app.goo.gl/zf97xL1jerr9r9WKA',
                     area=ImagemapArea(
                         x=0, y=1000, width=1000, height=1000
                     )
                 ),
                 # 法式料理
                 URIImagemapAction(
-                    link_uri='https://www.google.com/maps/search/?api=1&query=French+restaurant',
+                    link_uri='https://maps.app.goo.gl/8rJmSahbMDE4peZ38',
                     area=ImagemapArea(
                         x=1000, y=1000, width=1000, height=1000
                     )
