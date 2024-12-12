@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#載入LineBot所需要的套件
+# 載入LineBot所需要的套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -11,15 +11,14 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 import re
-import random
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi('grZNGQ4enesO10xsdNQNRHbKt4P4uYSU4LwSqDBPvR+G1gnnG4DgZE2WFHfLUpoCVE3tP3hLFrmmBTzqmTC5+Wy7P4o6fN825RpAyrHJ+ZKpm1xJ4IgCptwxSSvssovSlwnPe34cpkLYKCc3vd0BOwdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('RmscZ3tXPFTa3C+xKp9zU2zcapRysd2Lp/tRNkQT3a6FxxKY6XoTexhaMoarJVpf9X5PkvNRpFYLJJCpYJSlQfuPQ4VjgkuX46HOeXIv+fHJuqhaUGhSLXaWVsAqgVkY+zXzx40QYJL+d0GVK6BRQQdB04t89/1O/w1cDnyilFU=')
 # 必須放上自己的Channel Secret
-handler = WebhookHandler('b575b66d21e61d99d781691770236f63')
+handler = WebhookHandler('dde3f81dc0ffc12b0b826d473d1c7fa3')
 
-line_bot_api.push_message('U732b347d73dd0c11d034eb8233a15ef8', TextSendMessage(text='您好,目前時間是 2024/10/10 14:00 ，請問需要什麼服務呢?'))
+line_bot_api.push_message('Ue67e135a8e71bb7f0a94eb6947e0dc32', TextSendMessage(text='你可以開始了'))
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
@@ -39,112 +38,87 @@ def callback():
 
     return 'OK'
 
-#訊息傳遞區塊
-##### 基本上程式編輯都在這個function #####
+# 訊息傳遞區塊
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = text=event.message.text
-    stickers = [
-        {"package_id": "446", "sticker_id": "1993"},
-        {"package_id": "446", "sticker_id": "1994"},
-        {"package_id": "446", "sticker_id": "1995"},
-        {"package_id": "446", "sticker_id": "1996"},
-        {"package_id": "446", "sticker_id": "1997"},
-    ]
+    message = event.message.text
 
-    if event.message.text:
-        # 隨機選擇一個貼圖
-        sticker = random.choice(stickers)
-        sticker_message = StickerSendMessage(
-            package_id=sticker["package_id"],
-            sticker_id=sticker["sticker_id"]
+    # 當使用者輸入「推薦餐廳」時回傳 Imagemap
+    if re.match('推薦餐廳', message):
+        imagemap_message = ImagemapSendMessage(
+            base_url='https://i.imgur.com/your_restaurant_image.jpg', # 請替換為您的背景圖 URL
+            alt_text='餐廳推薦',
+            base_size=BaseSize(height=2000, width=2000),
+            actions=[
+                # 日式料理
+                URIImagemapAction(
+                    link_uri='https://www.google.com/maps/search/?api=1&query=Japanese+restaurant',
+                    area=ImagemapArea(
+                        x=0, y=0, width=1000, height=1000
+                    )
+                ),
+                # 西式料理
+                URIImagemapAction(
+                    link_uri='https://www.google.com/maps/search/?api=1&query=Western+restaurant',
+                    area=ImagemapArea(
+                        x=1000, y=0, width=1000, height=1000
+                    )
+                ),
+                # 中式料理
+                URIImagemapAction(
+                    link_uri='https://www.google.com/maps/search/?api=1&query=Chinese+restaurant',
+                    area=ImagemapArea(
+                        x=0, y=1000, width=1000, height=1000
+                    )
+                ),
+                # 法式料理
+                URIImagemapAction(
+                    link_uri='https://www.google.com/maps/search/?api=1&query=French+restaurant',
+                    area=ImagemapArea(
+                        x=1000, y=1000, width=1000, height=1000
+                    )
+                ),
+            ]
         )
-        line_bot_api.reply_message(event.reply_token, sticker_message)
+        line_bot_api.reply_message(event.reply_token, imagemap_message)
+
+    elif re.match('告訴我秘密', message):
+        imagemap_message = ImagemapSendMessage(
+            base_url='https://i.imgur.com/xMUKNtn.jpg',
+            alt_text='組圖訊息',
+            base_size=BaseSize(height=2000, width=2000),
+            actions=[
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Cebu',
+                    area=ImagemapArea(
+                        x=0, y=0, width=1000, height=1000
+                    )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Taipei',
+                    area=ImagemapArea(
+                        x=1000, y=0, width=1000, height=1000
+                    )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Osaka',
+                    area=ImagemapArea(
+                        x=0, y=1000, width=1000, height=1000
+                    )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Shanghai',
+                    area=ImagemapArea(
+                        x=1000, y=1000, width=1000, height=1000
+                    )
+                )
+            ]
+        )
+        line_bot_api.reply_message(event.reply_token, imagemap_message)
     else:
-        reply_text = '很抱歉，我目前無法理解這個內容。'
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
-    if message == '天氣':
-            reply_text = '請稍等，我幫您查詢天氣資訊！'
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
-
-    elif message == '心情好':
-            sticker_message = StickerSendMessage(
-            package_id='11537',
-            sticker_id='52002734'  # 開心的貼圖
-        )
-            line_bot_api.reply_message(event.reply_token, sticker_message)
-
-    elif message == '心情不好':
-            sticker_message = StickerSendMessage(
-            package_id='11537',
-            sticker_id='52002750'  # 傷心的貼圖
-        )
-            line_bot_api.reply_message(event.reply_token, sticker_message)
-
-    elif message == '找美食':
-            location_message = LocationSendMessage(
-            title='著名餐廳',
-            address='Gordon Ramsay Pub & Grill',
-            latitude=22.14726876398457,
-            longitude=113.56505331030235
-        )
-            line_bot_api.reply_message(event.reply_token, location_message)
-
-    elif message == '找景點':
-            location_message = LocationSendMessage(
-            title='熱門景點',
-            address='Hylton Castle',
-            latitude=54.92642132251696,
-            longitude=-1.4441933898550596
-        )
-            line_bot_api.reply_message(event.reply_token, location_message)
-
-    elif message == '熱門音樂':
-            audio_message = AudioSendMessage(
-            original_content_url='https://www.youtube.com/watch?v=mUhJUNJCcQ0',  # 替換為實際的音樂檔案網址
-            duration=240000  # 音樂長度（毫秒）
-        )
-            line_bot_api.reply_message(event.reply_token, audio_message)
-
-    elif message == '放鬆音樂':
-            audio_message = AudioSendMessage(
-            original_content_url='https://www.youtube.com/watch?v=ekr2nIex040',  # 替換為實際的音樂檔案網址
-            duration=300000  # 音樂長度（毫秒）
-        )
-            line_bot_api.reply_message(event.reply_token, audio_message)
-
-    elif message == '今天是我的生日':
-            image_message = ImageSendMessage(
-            original_content_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTev_tjnQuGPY3SXZ4nznPgJqd9juRuBRoOw&s',  # 替換為實際的圖片網址
-            preview_image_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTev_tjnQuGPY3SXZ4nznPgJqd9juRuBRoOw&s'  # 替換為實際的預覽圖片網址
-        )
-            text_message = TextSendMessage(text='生日快樂！')
-            line_bot_api.reply_message(event.reply_token, [image_message, text_message])
-
-    elif message in ['動作片', '動畫', '紀錄片']:
-        # 根據類型傳送影片
-        video_urls = {
-            '動作片': 'https://youtu.be/J4e68cK4FY0?si=LoDixR5kbjuLp9PH',
-            '動畫': 'https://youtu.be/Io9X8Clv3Xk?si=BFCVLv3JpwUiDXmD',
-            '紀錄片': 'https://youtu.be/IbaJ1hYYFH8?si=pC6A9DMzgzwECvh3'
-        }
-        video_url = video_urls.get(message)
-        if video_url:
-            reply_text = f'這是您要的{message}：\n{video_url}'
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
-        else:
-            reply_text = '抱歉，沒有這類型的影片'
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
-
-    elif message in ['科幻']:
-            reply_text = '抱歉，沒有這類型的影片'
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
-
-    else:
-            reply_text = '很抱歉，我目前無法理解這個內容。'
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(reply_text))
-#主程式
+# 主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

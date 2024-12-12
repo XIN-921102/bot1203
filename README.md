@@ -1,1 +1,1 @@
-# line_bot_StickerSendMessage
+# line_bot_ImagemapSendMessage
