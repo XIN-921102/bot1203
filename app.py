@@ -38,59 +38,52 @@ def callback():
 
     return 'OK'
 
-#訊息傳遞區塊
+# 訊息傳遞區塊
+##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = event.message.text.strip()
-    
-
-    if message == '推薦景點':
-        carousel_template_message = TemplateSendMessage(
-            alt_text='旅遊景點推薦',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/3UK5bhI.jpeg',
-                        title='台北101',
-                        text='世界著名地標與購物中心',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://zh.wikipedia.org/wiki/台北101'
-                            )
-                        ]
+    message = text = event.message.text
+    if re.match('告訴我秘密', message):
+        confirm_template_message = TemplateSendMessage(
+            alt_text='這是TemplateSendMessage',
+            template=ConfirmTemplate(
+                text='你喜歡韓國嗎？',
+                actions=[
+                    PostbackAction(
+                        label='喜歡',
+                        display_text='超喜歡',
+                        data='action=其實不喜歡'
                     ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/frXs2nV.jpeg',
-                        title='故宮博物院',
-                        text='收藏中華文化藝術珍品',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://www.npm.gov.tw/'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/qadTNYk.jpeg',
-                        title='九份老街',
-                        text='懷舊山城、茶館與特產',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://zh.wikipedia.org/wiki/九份'
-                            )
-                        ]
+                    MessageAction(
+                        label='讚',
+                        text='讚讚'
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message)
-
+        line_bot_api.reply_message(event.reply_token, confirm_template_message)
+    elif re.match('我要訂餐', message):
+        order_template_message = TemplateSendMessage(
+            alt_text='訂餐確認訊息',
+            template=ConfirmTemplate(
+                text='無敵好吃牛肉麵 * 1 ，總價NT200',
+                actions=[
+                    MessageAction(
+                        label='確定',
+                        text='訂單已確認，謝謝您的購買！'
+                    ),
+                    MessageAction(
+                        label='取消',
+                        text='已取消訂單，謝謝您的光臨！'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, order_template_message)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
-#主程式
+# 主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
