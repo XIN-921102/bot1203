@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 載入LineBot所需要的套件
+#載入LineBot所需要的套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi('RmscZ3tXPFTa3C+xKp9zU2zcapRysd2Lp/tRNkQT3a6FxxKY6XoTexhaMoarJVpf9X5PkvNRpFYLJJCpYJSlQfuPQ4VjgkuX46HOeXIv+fHJuqhaUGhSLXaWVsAqgVkY+zXzx40QYJL+d0GVK6BRQQdB04t89/1O/w1cDnyilFU=')
+
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('dde3f81dc0ffc12b0b826d473d1c7fa3')
 
@@ -38,52 +39,68 @@ def callback():
 
     return 'OK'
 
-# 訊息傳遞區塊
+#訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = text = event.message.text
-    if re.match('告訴我秘密', message):
-        confirm_template_message = TemplateSendMessage(
-            alt_text='這是TemplateSendMessage',
-            template=ConfirmTemplate(
-                text='你喜歡韓國嗎？',
-                actions=[
-                    PostbackAction(
-                        label='喜歡',
-                        display_text='超喜歡',
-                        data='action=其實不喜歡'
+    message = text=event.message.text
+    if re.match('推薦景點',message):
+        carousel_template_message = TemplateSendMessage(
+            alt_text='熱門旅行景點',
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/xRBnJwk.png',
+                        title='法羅群島',
+                        text='Faroe Islands',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                uri='https://maps.app.goo.gl/zTxbpMz9aTyEfAU77'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://www.canon.com.hk/tc/club/article/itemDetail.do?itemId=10496'
+                            )
+                        ]
                     ),
-                    MessageAction(
-                        label='讚',
-                        text='讚讚'
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/ES4f9oQ.jpeg',
+                        title='冰島',
+                        text='Iceland',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                uri='https://maps.app.goo.gl/NntWXAXjVxzsFuK49'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://zh.wikipedia.org/zh-tw/%E5%86%B0%E5%B2%9B'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/aRJXCWh.jpeg',
+                        title='北海道',
+                        text='Japan',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                uri='https://maps.app.goo.gl/itU2dK1ccTTKaBENA'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://zh.wikipedia.org/zh-tw/%E5%8C%97%E6%B5%B7%E9%81%93'
+                            )
+                        ]
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, confirm_template_message)
-    elif re.match('我要訂餐', message):
-        order_template_message = TemplateSendMessage(
-            alt_text='訂餐確認訊息',
-            template=ConfirmTemplate(
-                text='無敵好吃牛肉麵 * 1 ，總價NT200',
-                actions=[
-                    MessageAction(
-                        label='確定',
-                        text='訂單已確認，謝謝您的購買！'
-                    ),
-                    MessageAction(
-                        label='取消',
-                        text='已取消訂單，謝謝您的光臨！'
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, order_template_message)
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-
-# 主程式
+#主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
