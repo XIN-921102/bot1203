@@ -7,8 +7,8 @@ from linebot import (
 )
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
-import re
 import os
+import re
 
 app = Flask(__name__)
 
@@ -36,45 +36,181 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    if re.match('電影推薦', message):
-        image_carousel_template_message = TemplateSendMessage(
-            alt_text='電影推薦',
-            template=ImageCarouselTemplate(
-                columns=[
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/gMkJXKV.jpeg',
-                        action=URIAction(
-                            label='查看詳情',
-                            uri='https://www.imdb.com/title/tt0111161/'  # 《刺激1995》
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/8pC5rSp.png',
-                        action=URIAction(
-                            label='查看詳情',
-                            uri='https://www.imdb.com/title/tt0133093/'  # 《駭客任務》
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/mraKT3t.jpeg',
-                        action=URIAction(
-                            label='查看詳情',
-                            uri='https://www.imdb.com/title/tt0110413/'  # 《阿甘正傳》
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/2mIVMLV.png',
-                        action=URIAction(
-                            label='查看詳情',
-                            uri='https://www.imdb.com/title/tt1375666/'  # 《全面啟動》
-                        )
-                    )
+    if re.match('查看菜單', message):
+        flex_message = FlexSendMessage(
+            alt_text='餐廳菜單推薦',
+            contents={
+                "type": "carousel",
+                "contents": [
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://i.imgur.com/BM0tHY4.png",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "和風炸豬排",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "香酥外皮，搭配特製和風醬料。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 320",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=和風炸豬排"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://i.imgur.com/o0UM6Ne.png",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "炙燒牛排",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "完美熟成，炙燒香氣濃郁。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 580",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=炙燒牛排"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://i.imgur.com/tsXYlAJ.jpeg",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "鮮蝦義大利麵",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "手工麵條搭配新鮮大蝦。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 420",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=鮮蝦義大利麵"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    }
                 ]
-            )
+            }
         )
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, flex_message)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入「電影推薦」以獲取推薦電影列表。"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入有效的指令"))
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if "action=order" in data:
+        item = data.split("&item=")[1]
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"已成功將「{item}」加入購物車！")
+        )
 
 # 主程式
 if __name__ == "__main__":
