@@ -44,7 +44,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = text=event.message.text
-    if re.match('推薦景點',message):
+    if re.match('000',message):
         carousel_template_message = TemplateSendMessage(
             alt_text='熱門旅行景點',
             template=CarouselTemplate(
@@ -54,7 +54,7 @@ def handle_message(event):
                         title='法羅群島',
                         text='Faroe Islands',
                         actions=[
-                            MessageAction(
+                            URIAction(
                                 label='導覽',
                                 uri='https://maps.app.goo.gl/zTxbpMz9aTyEfAU77'
                             ),
@@ -69,7 +69,7 @@ def handle_message(event):
                         title='冰島',
                         text='Iceland',
                         actions=[
-                            MessageAction(
+                            URIAction(
                                 label='導覽',
                                 uri='https://maps.app.goo.gl/NntWXAXjVxzsFuK49'
                             ),
@@ -84,7 +84,7 @@ def handle_message(event):
                         title='北海道',
                         text='Japan',
                         actions=[
-                            MessageAction(
+                            URIAction(
                                 label='導覽',
                                 uri='https://maps.app.goo.gl/itU2dK1ccTTKaBENA'
                             ),
