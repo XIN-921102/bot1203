@@ -1,1 +1,1 @@
-# line_bot_FlexSendMessage
+# line_bot_ImageCarouselTemplate
