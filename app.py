@@ -37,43 +37,50 @@ def callback():
 def handle_message(event):
     message = event.message.text
     if re.match('旅遊推薦', message):
-        image_carousel_template_message = TemplateSendMessage(
+        carousel_template_message = TemplateSendMessage(
             alt_text='旅遊景點推薦',
-            template=ImageCarouselTemplate(
+            template=CarouselTemplate(
                 columns=[
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/5IfWEYi.jpeg',
-                        action=URIAction(
-                            label='法羅群島',
-                            uri='https://maps.app.goo.gl/x5GCp2GM1N7yA5XG7'
-                        ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/5IfWEYi.jpeg',
                         title='法羅群島',
-                        text='位於北大西洋，風景如畫的島嶼。'
+                        text='位於北大西洋，風景如畫的島嶼。',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://maps.app.goo.gl/x5GCp2GM1N7yA5XG7'
+                            )
+                        ]
                     ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/Zv687p8.jpeg',
-                        action=URIAction(
-                            label='冰島',
-                            uri='https://maps.app.goo.gl/drBLg8SpYMUHHPZ56'
-                        ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/Zv687p8.jpeg',
                         title='冰島',
-                        text='冰與火之國，擁有壯觀的極光與瀑布。'
+                        text='冰與火之國，擁有壯觀的極光與瀑布。',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://maps.app.goo.gl/drBLg8SpYMUHHPZ56'
+                            )
+                        ]
                     ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/m9ENy4Q.jpeg',
-                        action=URIAction(
-                            label='聖托里尼',
-                            uri='https://maps.app.goo.gl/pnEmq3S39bSXG8nS8'
-                        ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/m9ENy4Q.jpeg',
                         title='聖托里尼',
-                        text='希臘著名的藍白建築，適合觀賞日落。'
+                        text='希臘著名的藍白建築，適合觀賞日落。',
+                        actions=[
+                            URIAction(
+                                label='查看詳細資訊',
+                                uri='https://maps.app.goo.gl/pnEmq3S39bSXG8nS8'
+                            )
+                        ]
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入「旅遊推薦」以獲取推薦景點列表。"))
+
 
 # 主程式
 if __name__ == "__main__":
