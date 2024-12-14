@@ -48,7 +48,7 @@ def handle_message(event):
                             uri='https://maps.app.goo.gl/x5GCp2GM1N7yA5XG7'
                         ),
                         title='法羅群島',
-                        text='法羅群島位於挪威和冰島中間，由 18 座島嶼組成，就像一塊碎裂的鏡子，鑲嵌在大西洋上。'
+                        text='位於北大西洋，風景如畫的島嶼。'
                     ),
                     ImageCarouselColumn(
                         image_url='https://i.imgur.com/Zv687p8.jpeg',
@@ -57,7 +57,7 @@ def handle_message(event):
                             uri='https://maps.app.goo.gl/drBLg8SpYMUHHPZ56'
                         ),
                         title='冰島',
-                        text='冰島，是北大西洋中的一個島國，位於北大西洋和北冰洋的交匯處，是北歐五國之一。'
+                        text='冰與火之國，擁有壯觀的極光與瀑布。'
                     ),
                     ImageCarouselColumn(
                         image_url='https://i.imgur.com/m9ENy4Q.jpeg',
@@ -66,7 +66,7 @@ def handle_message(event):
                             uri='https://maps.app.goo.gl/pnEmq3S39bSXG8nS8'
                         ),
                         title='聖托里尼',
-                        text='聖托里尼是在希臘大陸東南200公里的愛琴海上由一群火山組成的島環，位於北緯 36.40° —東經 25.40°。'
+                        text='希臘著名的藍白建築，適合觀賞日落。'
                     )
                 ]
             )
