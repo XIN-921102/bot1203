@@ -1,30 +1,36 @@
 # -*- coding: utf-8 -*-
 
-# 載入 LineBot 所需要的套件
+#載入LineBot所需要的套件
 from flask import Flask, request, abort
+
 from linebot import (
     LineBotApi, WebhookHandler
 )
-from linebot.exceptions import InvalidSignatureError
+from linebot.exceptions import (
+    InvalidSignatureError
+)
 from linebot.models import *
-import os
 import re
-
 app = Flask(__name__)
 
-# 必須放上自己的 Channel Access Token 和 Channel Secret
-line_bot_api = LineBotApi('RmscZ3tXPFTa3C+xKp9zU2zcapRysd2Lp/tRNkQT3a6FxxKY6XoTexhaMoarJVpf9X5PkvNRpFYLJJCpYJSlQfuPQ4VjgkuX46HOeXIv+fHJuqhaUGhSLXaWVsAqgVkY+zXzx40QYJL+d0GVK6BRQQdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('dde3f81dc0ffc12b0b826d473d1c7fa3')
+# 必須放上自己的Channel Access Token
+line_bot_api = LineBotApi('grZNGQ4enesO10xsdNQNRHbKt4P4uYSU4LwSqDBPvR+G1gnnG4DgZE2WFHfLUpoCVE3tP3hLFrmmBTzqmTC5+Wy7P4o6fN825RpAyrHJ+ZKpm1xJ4IgCptwxSSvssovSlwnPe34cpkLYKCc3vd0BOwdB04t89/1O/w1cDnyilFU=')
+# 必須放上自己的Channel Secret
+handler = WebhookHandler('b575b66d21e61d99d781691770236f63')
 
-line_bot_api.push_message('Ue67e135a8e71bb7f0a94eb6947e0dc32', TextSendMessage(text='你可以開始了'))
+line_bot_api.push_message('U732b347d73dd0c11d034eb8233a15ef8', TextSendMessage(text='你可以開始了'))
 
-# 監聽所有來自 /callback 的 POST 請求
+# 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
+    # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
+
+    # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
+    # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
@@ -32,57 +38,48 @@ def callback():
 
     return 'OK'
 
-# 訊息處理邏輯
+#訊息傳遞區塊
+##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = event.message.text
-    if re.match('旅遊推薦', message):
-        carousel_template_message = TemplateSendMessage(
-            alt_text='旅遊景點推薦',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/5IfWEYi.jpeg',
-                        title='法羅群島',
-                        text='位於北大西洋，風景如畫的島嶼。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://maps.app.goo.gl/x5GCp2GM1N7yA5XG7'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/Zv687p8.jpeg',
-                        title='冰島',
-                        text='冰與火之國，擁有壯觀的極光與瀑布。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://maps.app.goo.gl/drBLg8SpYMUHHPZ56'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/m9ENy4Q.jpeg',
-                        title='聖托里尼',
-                        text='希臘著名的藍白建築，適合觀賞日落。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://maps.app.goo.gl/pnEmq3S39bSXG8nS8'
-                            )
-                        ]
+    message = text=event.message.text
+    if re.match('告訴我秘密',message):
+        imagemap_message = ImagemapSendMessage(
+            base_url='https://i.imgur.com/xMUKNtn.jpg',
+            alt_text='組圖訊息',
+            base_size=BaseSize(height=2000, width=2000),
+            actions=[
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Cebu',
+                    area=ImagemapArea(
+                        x=0, y=0, width=1000, height=1000
                     )
-                ]
-            )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Taipei',
+                    area=ImagemapArea(
+                        x=1000, y=0, width=1000, height=1000
+                    )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Osaka',
+                    area=ImagemapArea(
+                        x=0, y=1000, width=1000, height=1000
+                    )
+                ),
+                URIImagemapAction(
+                    link_uri='https://en.wikipedia.org/wiki/Shanghai',
+                    area=ImagemapArea(
+                        x=1000, y=1000, width=1000, height=1000
+                    )
+                )
+            ]
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, imagemap_message)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入「旅遊推薦」以獲取推薦景點列表。"))
-
-
-# 主程式
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+#主程式
+import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
