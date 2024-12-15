@@ -1,1 +1,1 @@
-# line_bot_ConfirmTemplate
+# line_bot_QuickReply

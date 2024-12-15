@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 載入LineBot所需要的套件
+#載入LineBot所需要的套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -38,52 +38,25 @@ def callback():
 
     return 'OK'
 
-# 訊息傳遞區塊
+#訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = text = event.message.text
-    if re.match('告訴我秘密', message):
-        confirm_template_message = TemplateSendMessage(
-            alt_text='這是TemplateSendMessage',
-            template=ConfirmTemplate(
-                text='你喜歡韓國嗎？',
-                actions=[
-                    PostbackAction(
-                        label='喜歡',
-                        display_text='超喜歡',
-                        data='action=其實不喜歡'
-                    ),
-                    MessageAction(
-                        label='讚',
-                        text='讚讚'
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, confirm_template_message)
-    elif re.match('我要訂餐', message):
-        order_template_message = TemplateSendMessage(
-            alt_text='訂餐確認訊息',
-            template=ConfirmTemplate(
-                text='無敵好吃牛肉麵 * 1 ，總價NT200',
-                actions=[
-                    MessageAction(
-                        label='確定',
-                        text='訂單已確認，謝謝您的購買！'
-                    ),
-                    MessageAction(
-                        label='取消',
-                        text='已取消訂單，謝謝您的光臨！'
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, order_template_message)
+    message = text=event.message.text
+    if re.match('告訴我秘密',message):
+        flex_message = TextSendMessage(text='請點選您想去的國家',
+                               quick_reply=QuickReply(items=[
+                                   QuickReplyButton(action=MessageAction(label="日本", text="Japan")),
+                                   QuickReplyButton(action=MessageAction(label="台灣", text="Taiwan")),
+                                   QuickReplyButton(action=MessageAction(label="新加坡", text="Singapore")),
+                                   QuickReplyButton(action=MessageAction(label="韓國", text="Korea")),
+                                   QuickReplyButton(action=MessageAction(label="中國", text="China")),
+                                   QuickReplyButton(action=MessageAction(label="美國", text="US"))
+                               ]))
+        line_bot_api.reply_message(event.reply_token, flex_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-
-# 主程式
+#主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
