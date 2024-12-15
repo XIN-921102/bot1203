@@ -44,7 +44,7 @@ def handle_message(event):
                     CarouselColumn(
                         thumbnail_image_url='https://webcms.asset.catchplay.com/l/assets/img/article/article-988-iqrmyyxl/keyvisual.jpg',
                         title='玩命關頭',
-                        text='位於北大西洋，風景如畫的島嶼。',
+                        text='動作電影。',
                         actions=[
                             URIAction(
                                 label='查看詳細資訊',
@@ -55,7 +55,7 @@ def handle_message(event):
                     CarouselColumn(
                         thumbnail_image_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvICT01Rkyp92NikjHTfCi7E2IiJ_4w1IDWQ&s',
                         title='海洋奇緣',
-                        text='冰與火之國，擁有壯觀的極光與瀑布。',
+                        text='動畫片。',
                         actions=[
                             URIAction(
                                 label='查看詳細資訊',
@@ -66,7 +66,7 @@ def handle_message(event):
                     CarouselColumn(
                         thumbnail_image_url='https://image-cdn.hypb.st/https%3A%2F%2Fhk.hypebeast.com%2Ffiles%2F2022%2F08%2Fjoker-2-sequel-joaquin-phoenix-2024-premiere-date-1.jpg?q=75&w=800&cbr=1&fit=max',
                         title='小丑',
-                        text='希臘著名的藍白建築，適合觀賞日落。',
+                        text='動作片。',
                         actions=[
                             URIAction(
                                 label='查看詳細資訊',
@@ -77,7 +77,7 @@ def handle_message(event):
                     CarouselColumn(
                         thumbnail_image_url='https://image.agentm.tw/images/movie/a142013b564a2f20929f3bdd09cf979baee7a4667734dcea850d9ecc42e0b695/poster/image/px_0004.jpg',
                         title='猛毒',
-                        text='冰與火之國，擁有壯觀的極光與瀑布。',
+                        text='動作片。',
                         actions=[
                             URIAction(
                                 label='查看詳細資訊',
