@@ -13,10 +13,10 @@ import re
 app = Flask(__name__)
 
 # 必須放上自己的 Channel Access Token 和 Channel Secret
-line_bot_api = LineBotApi('grZNGQ4enesO10xsdNQNRHbKt4P4uYSU4LwSqDBPvR+G1gnnG4DgZE2WFHfLUpoCVE3tP3hLFrmmBTzqmTC5+Wy7P4o6fN825RpAyrHJ+ZKpm1xJ4IgCptwxSSvssovSlwnPe34cpkLYKCc3vd0BOwdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('b575b66d21e61d99d781691770236f63')
+line_bot_api = LineBotApi('RmscZ3tXPFTa3C+xKp9zU2zcapRysd2Lp/tRNkQT3a6FxxKY6XoTexhaMoarJVpf9X5PkvNRpFYLJJCpYJSlQfuPQ4VjgkuX46HOeXIv+fHJuqhaUGhSLXaWVsAqgVkY+zXzx40QYJL+d0GVK6BRQQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('dde3f81dc0ffc12b0b826d473d1c7fa3')
 
-line_bot_api.push_message('U732b347d73dd0c11d034eb8233a15ef8', TextSendMessage(text='你可以開始了'))
+line_bot_api.push_message('Ue67e135a8e71bb7f0a94eb6947e0dc32', TextSendMessage(text='你可以開始了'))
 
 # 監聽所有來自 /callback 的 POST 請求
 @app.route("/callback", methods=['POST'])
@@ -36,62 +36,181 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    if re.match('電影推薦', message):
-        carousel_template_message = TemplateSendMessage(
-            alt_text='旅遊景點推薦',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        thumbnail_image_url='https://webcms.asset.catchplay.com/l/assets/img/article/article-988-iqrmyyxl/keyvisual.jpg',
-                        title='玩命關頭',
-                        text='動作電影。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://youtu.be/5gcuGLJN2uU?si=OsLTHiejZRYUQxxi'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvICT01Rkyp92NikjHTfCi7E2IiJ_4w1IDWQ&s',
-                        title='海洋奇緣',
-                        text='動畫片。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://youtu.be/0PjI4AyCEkw?si=fk5XR340ygEn4j6p'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://image-cdn.hypb.st/https%3A%2F%2Fhk.hypebeast.com%2Ffiles%2F2022%2F08%2Fjoker-2-sequel-joaquin-phoenix-2024-premiere-date-1.jpg?q=75&w=800&cbr=1&fit=max',
-                        title='小丑',
-                        text='動作片。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://youtu.be/Eoook2Ee6q0?si=0wJAEgKCGiMBh3Bf'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://image.agentm.tw/images/movie/a142013b564a2f20929f3bdd09cf979baee7a4667734dcea850d9ecc42e0b695/poster/image/px_0004.jpg',
-                        title='猛毒',
-                        text='動作片。',
-                        actions=[
-                            URIAction(
-                                label='查看詳細資訊',
-                                uri='https://youtu.be/fGErm6zGbGI?si=rWEXongA2f6p6vYX'
-                            )
-                        ]
-                    )
+    if re.match('查看菜單', message):
+        flex_message = FlexSendMessage(
+            alt_text='餐廳菜單推薦',
+            contents={
+                "type": "carousel",
+                "contents": [
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Tokyo_Chikuyotei_Unadon01s2100.jpg/800px-Tokyo_Chikuyotei_Unadon01s2100.jpg",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "鰻魚飯",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "密制醬汁，搭配特製烤鰻魚。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 350",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=鰻魚飯"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://www.gomaji.com/blog/wp-content/uploads/2024/02/Snapinsta.app_307301802_1234327370470820_7001915545910360195_n_1080.jpg",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "生魚片",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "新鮮光亮，口感滑順。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 300",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=生魚片"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://d3l76hx23vw40a.cloudfront.net/recipe/bk145-016.jpg",  # 替換為餐點圖片
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "雞排",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "口感酥脆。",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "價格: NT 80",
+                                    "color": "#333333",
+                                    "size": "md"
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "訂購",
+                                        "data": "action=order&item=雞排"
+                                    },
+                                    "style": "primary",
+                                    "color": "#905c44"
+                                }
+                            ]
+                        }
+                    }
                 ]
-            )
+            }
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, flex_message)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入「旅遊推薦」以獲取推薦景點列表。"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入有效的指令"))
 
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if "action=order" in data:
+        item = data.split("&item=")[1]
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"已成功將「{item}」加入購物車！")
+        )
 
 # 主程式
 if __name__ == "__main__":
