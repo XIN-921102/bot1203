@@ -1,1 +1,1 @@
-# line_bot_QuickReply
+# line_bot_ImageCarouselTemplate
