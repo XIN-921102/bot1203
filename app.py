@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#載入LineBot所需要的套件
+# 載入LineBot所需要的套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -15,7 +15,6 @@ app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi('grZNGQ4enesO10xsdNQNRHbKt4P4uYSU4LwSqDBPvR+G1gnnG4DgZE2WFHfLUpoCVE3tP3hLFrmmBTzqmTC5+Wy7P4o6fN825RpAyrHJ+ZKpm1xJ4IgCptwxSSvssovSlwnPe34cpkLYKCc3vd0BOwdB04t89/1O/w1cDnyilFU=')
-
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('b575b66d21e61d99d781691770236f63')
 
@@ -39,68 +38,52 @@ def callback():
 
     return 'OK'
 
-#訊息傳遞區塊
+# 訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = text=event.message.text
-    if re.match('推薦景點',message):
-        carousel_template_message = TemplateSendMessage(
-            alt_text='熱門旅行景點',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        thumbnail_image_url='https://www.todaiji.or.jp/wp-content/uploads/2022/02/daibutsuden00.jpg',
-                        title='東大寺',
-                        text='Todaiji Temple',
-                        actions=[
-                            URIAction(
-                                label='導覽',
-                                uri='https://www.todaiji.or.jp/zh/information/daibutsuden/'
-                            ),
-                            URIAction(
-                                label='詳細資訊',
-                                uri='https://www.todaiji.or.jp/zh/information/daibutsuden/'
-                            )
-                        ]
+    message = text = event.message.text
+    if re.match('告訴我秘密', message):
+        confirm_template_message = TemplateSendMessage(
+            alt_text='這是TemplateSendMessage',
+            template=ConfirmTemplate(
+                text='你喜歡韓國嗎？',
+                actions=[
+                    PostbackAction(
+                        label='喜歡',
+                        display_text='超喜歡',
+                        data='action=其實不喜歡'
                     ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://upload.wikimedia.org/wikipedia/commons/c/c2/01_khafre_north.jpg',
-                        title='埃及金字塔',
-                        text='egyptian pyramidsd',
-                        actions=[
-                            URIAction(
-                                label='導覽',
-                                uri='https://ninetyroadtravel.com/egypt/khufu/'
-                            ),
-                            URIAction(
-                                label='詳細資訊',
-                                uri='https://zh.wikipedia.org/zh-tw/%E5%9F%83%E5%8F%8A%E9%87%91%E5%AD%97%E5%A1%94'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo3PtF0hSIGEHu43UDbwtPQNyoCLQSN0n4sA&s',
-                        title='漁人碼頭',
-                        text='fisherman',
-                        actions=[
-                            URIAction(
-                                label='導覽',
-                                uri='https://www.travelking.com.tw/tourguide/taipei/scenery1105.html'
-                            ),
-                            URIAction(
-                                label='詳細資訊',
-                                uri='https://zh.wikipedia.org/zh-tw/%E6%B7%A1%E6%B0%B4%E6%BC%81%E4%BA%BA%E7%A2%BC%E9%A0%AD'
-                            )
-                        ]
+                    MessageAction(
+                        label='讚',
+                        text='讚讚'
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, confirm_template_message)
+    elif re.match('我要訂餐', message):
+        order_template_message = TemplateSendMessage(
+            alt_text='訂餐確認訊息',
+            template=ConfirmTemplate(
+                text='無敵好吃牛肉麵 * 1 ，總價NT200',
+                actions=[
+                    MessageAction(
+                        label='確定',
+                        text='訂單已確認，謝謝您的購買！'
+                    ),
+                    MessageAction(
+                        label='取消',
+                        text='已取消訂單，謝謝您的光臨！'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, order_template_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-#主程式
+
+# 主程式
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

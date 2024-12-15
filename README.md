@@ -1,1 +1,1 @@
-# line_bot_CarouselTemplate
+# line_bot_ConfirmTemplate
