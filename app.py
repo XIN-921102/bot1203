@@ -45,7 +45,7 @@ def handle_message(event):
     message = text=event.message.text
     if re.match('告訴我秘密',message):
         imagemap_message = ImagemapSendMessage(
-            base_url='https://i.imgur.com/xMUKNtn.jpg',
+            base_url='https://i.imgur.com/WbWyrhz.png?3',
             alt_text='組圖訊息',
             base_size=BaseSize(height=2000, width=2000),
             actions=[
